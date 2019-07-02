@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.yansa.appfirebase.Classes.Usuario;
 import com.example.yansa.appfirebase.DAO.ConfiguracaoFirebase;
+import com.example.yansa.appfirebase.Helper.Preferencias;
 import com.example.yansa.appfirebase.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,15 +73,16 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-
-
                     abrirTelaPrincipal();
-                    Toast.makeText(MainActivity.this, "Login efetuado com sucesso!", Toast.LENGTH_SHORT).show();
 
-                } else {
-                    Toast.makeText(MainActivity.this, "Usuario ou senha Invalidos! Tente Novamente", Toast.LENGTH_SHORT).show();
+                    Preferencias preferencias = new Preferencias(MainActivity.this);
+                    preferencias.salvarUsuarioPreferencias(usuario.getEmail(), usuario.getSenha());
+                    Toast.makeText(MainActivity.this, "Login efetuado com sucesso!", Toast.LENGTH_SHORT).show();
                 }
 
+                else {
+                    Toast.makeText(MainActivity.this, "Usuario ou senha Invalidos! Tente Novamente", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private void abrirTelaPrincipal() {
 
         Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+        finish();
         startActivity(intent);
 
     }
@@ -103,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return false;
             }
-
 
     }
 
